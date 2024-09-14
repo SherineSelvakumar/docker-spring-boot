@@ -16,7 +16,7 @@ steps:
 # Step 1: Login to Azure
 - task: AzureCLI@2
   inputs:
-    azureSubscription: '0e1df12c-8ec5-4f1a-b63d-44af2d1bb2cc'  # Your Azure subscription ID
+    azureSubscription: 'Sagent Build Pipelines"  # Your Azure subscription ID
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
