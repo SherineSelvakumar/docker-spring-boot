@@ -1,0 +1,49 @@
+trigger:
+  branches:
+    include:
+      - main  # Set the branch name you want to trigger the build from
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  acrName: 'sagentacr130924'
+  acrLoginServer: 'sagentacr130924.azurecr.io'
+  imageName: 'my-docker-app'
+  kubernetesNamespace: 'helm-deployment'
+
+steps:
+# Step 1: Login to Azure
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: '0e1df12c-8ec5-4f1a-b63d-44af2d1bb2cc'  # Your Azure subscription ID
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      echo "Logging into Azure"
+      az acr login --name $(acrName)
+
+# Step 2: Build Docker image
+- task: Docker@2
+  inputs:
+    containerRegistry: '$(acrLoginServer)'
+    repository: '$(acrLoginServer)/$(imageName)'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+    tags: |
+      latest
+
+# Step 3: Install Helm
+- task: HelmInstaller@1
+  inputs:
+    helmVersionToInstall: 'latest'
+
+# Step 4: Deploy Helm Chart
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: '0e1df12c-8ec5-4f1a-b63d-44af2d1bb2cc'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az aks get-credentials --resource-group aks_tf_rg --name my-aks-cluster
+      helm upgrade --install sagent-release ./Sagentchart --namespace $(kubernetesNamespace) --set image.repository=$(acrLoginServer)/$(imageName) --set image.tag=latest
