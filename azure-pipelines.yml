@@ -5,7 +5,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  azureSubscription: sagentpipeline
+  azureSubscription: 0e1df12c-8ec5-4f1a-b63d-44af2d1bb2cc
   resourceGroup: aks_tf_rg
   aksCluster: my-aks-cluster
   imageName: 'springboot-app'
