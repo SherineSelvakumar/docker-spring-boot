@@ -5,11 +5,11 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  azureSubscription: 0e1df12c-8ec5-4f1a-b63d-44af2d1bb2cc
-  resourceGroup: aks_tf_rg
-  aksCluster: my-aks-cluster
+  azureSubscription: '0e1df12c-8ec5-4f1a-b63d-44af2d1bb2cc'
+  resourceGroup: 'aks_tf_rg'
+  aksCluster: 'my-aks-cluster'
   imageName: 'springboot-app'
-  containerRegistry: sagentacr130924
+  containerRegistry: 'sagentacr130924'
 
 stages:
 - stage: Build
